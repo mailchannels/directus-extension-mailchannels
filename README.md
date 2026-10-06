@@ -44,6 +44,13 @@ Use an allowed sender and recipient for initial validation.
 
 ## Credentials, logs and failures
 
+Directus 12.4.1 can save an operation with an empty payload even though the
+field is marked required. Saving the Flow does not validate an email request.
+The extension rejects a missing payload before making an HTTP request. Inspect
+the operation's resolve/reject result in Flow logs: the Flow webhook itself can
+return HTTP 200 with an empty object even when an operation rejects. Confirm the
+explicit `validated: true` result before treating a dry-run as successful.
+
 The sandbox scope allows initial POST requests only to the fixed MailChannels
 send URL and its dry-run variant. The extension never returns the key, payload or API response
 body, and sanitizes errors without retaining the original exception. It does not
