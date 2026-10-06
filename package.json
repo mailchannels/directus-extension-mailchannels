@@ -1,0 +1,68 @@
+{
+  "name": "@mailchannels/directus-extension-mailchannels",
+  "version": "0.1.0",
+  "description": "Send transactional email with MailChannels in Directus Flows.",
+  "type": "module",
+  "license": "MIT",
+  "keywords": [
+    "directus-extension",
+    "directus",
+    "mailchannels",
+    "email",
+    "flows"
+  ],
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "icon": "outgoing_mail",
+  "scripts": {
+    "build": "directus-extension build",
+    "test": "node --test test/*.test.mjs",
+    "validate": "directus-extension validate"
+  },
+  "devDependencies": {
+    "@directus/extensions-sdk": "18.0.5"
+  },
+  "directus:extension": {
+    "type": "operation",
+    "path": {
+      "app": "dist/app.js",
+      "api": "dist/api.js"
+    },
+    "source": {
+      "app": "src/app.js",
+      "api": "src/api.js"
+    },
+    "host": "^12.4.1",
+    "sandbox": {
+      "enabled": true,
+      "requestedScopes": {
+        "request": {
+          "methods": [
+            "POST"
+          ],
+          "urls": [
+            "https://api.mailchannels.net/tx/v1/send",
+            "https://api.mailchannels.net/tx/v1/send?dry-run=true"
+          ]
+        }
+      }
+    }
+  },
+  "overrides": {
+    "@directus/composables": {
+      "axios": "1.20.0"
+    }
+  },
+  "bugs": {
+    "email": "dev@mailchannels.com",
+    "url": "https://github.com/mailchannels/directus-extension-mailchannels/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mailchannels/directus-extension-mailchannels.git"
+  },
+  "homepage": "https://github.com/mailchannels/directus-extension-mailchannels#readme"
+}
