@@ -126,3 +126,10 @@ Inspect the operation's API-key environment reference, dry-run default, JSON edi
 dynamic Flow expressions, and success/rejection branches. This mode makes that review
 reproducible; serving the page alone is not proof of correct rendering or interaction.
 No live MailChannels traffic or npm publication is part of this fixture.
+
+The development dependency overrides pin Axios1.20.0 under Directus composables and
+Vue3.5.43 across the SDK toolchain. The Vue pin addresses the server-renderer advisory
+GHSA-g2v6-rqmx-r4w6 without downgrading the Directus SDK. This package has only development
+dependencies; these overrides do not patch the installed Directus server image. Rebuilt
+app/API bundles retain their prior hashes. Review/remove overrides when upstream SDK
+pins incorporate the fixes, and rerun the clean build, validator and native smoke test.
