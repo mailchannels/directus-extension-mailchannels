@@ -104,3 +104,25 @@ Support owner: [dev@mailchannels.com](mailto:dev@mailchannels.com).
 - [Sandbox scopes](https://directus.com/docs/guides/extensions/api-extensions/sandbox)
 - [Flow environment configuration](https://directus.com/docs/configuration/flows)
 - [Marketplace publication](https://directus.com/docs/guides/extensions/marketplace/publishing)
+
+## Disposable Data Studio review
+
+After building the extension, run `python test/docker-smoke.py --studio-port 18055`.
+The usual six sandbox checks run first. The script then leaves the local fixture alive,
+restores dry-run mode, and prints its Flow URL. Open that URL in a browser on the same
+machine. The synthetic login is `fixture@example.com` with password
+`Local-fixture-only-password-2026`. These credentials belong only to this disposable
+fixture; do not reuse them in a real project. The MailChannels key is independently
+random and belongs only to the mock HTTPS service, not a real account.
+
+The listener binds127.0.0.1 only. It tunnels TCP over `docker exec` so Directus and its
+HTTPS fixture stay on an internal Docker network with no internet egress. No extra
+bridge network or public port is opened. Studio mode is for a trusted local reviewer,
+not a shared hosting environment. Ctrl-C the script to stop the listener, remove its
+containers/network and discard the temporary credentials/database. Normal smoke-test
+mode still exits and cleans up automatically.
+
+Inspect the operation's API-key environment reference, dry-run default, JSON editor,
+dynamic Flow expressions, and success/rejection branches. This mode makes that review
+reproducible; serving the page alone is not proof of correct rendering or interaction.
+No live MailChannels traffic or npm publication is part of this fixture.
