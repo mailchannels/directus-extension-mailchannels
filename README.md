@@ -122,6 +122,15 @@ machine. The synthetic login is `fixture@example.com` with password
 fixture; do not reuse them in a real project. The MailChannels key is independently
 random and belongs only to the mock HTTPS service, not a real account.
 
+When reusing the same browser and port after recreating this disposable fixture, an
+expired session can make the initial extension-source request return403. In tested
+Directus12.4.1, signing in then showed `Operation "mailchannels-send-email" not found`
+until the page was reloaded. Reload once after successful fixture login and confirm
+that the MailChannels Email operation and its options appear. Do not click Reset
+Interface or overwrite the saved operation to work around an unloaded app bundle.
+If reload does not restore it, investigate extension loading and authentication;
+backend smoke success alone does not prove that the Studio bundle loaded.
+
 The listener binds127.0.0.1 only. It tunnels TCP over `docker exec` so Directus and its
 HTTPS fixture stay on an internal Docker network with no internet egress. No extra
 bridge network or public port is opened. Studio mode is for a trusted local reviewer,
