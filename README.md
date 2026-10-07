@@ -149,3 +149,18 @@ GHSA-g2v6-rqmx-r4w6 without downgrading the Directus SDK. This package has only 
 dependencies; these overrides do not patch the installed Directus server image. Rebuilt
 app/API bundles retain their prior hashes. Review/remove overrides when upstream SDK
 pins incorporate the fixes, and rerun the clean build, validator and native smoke test.
+
+### Accessible operation controls
+
+The API-key reference and JSON editor expose explicit accessible names through
+Directus interface options; the dry-run control is labelled “Dry run (no email sent)”.
+These names were verified in Chrome's native accessibility tree on Directus12.4.1,
+including the CodeMirror-generated input, without modifying the runtime DOM.
+
+A separate Directus12.4.1 host limitation remains: its boolean interface renders
+`role="checkbox"` with `aria-pressed` instead of `aria-checked`. Chrome reports an
+incorrect checked state even though the visible control and stored boolean work.
+Space toggles the control and can restore dry-run, but correct names alone do not
+establish screen-reader acceptance. Review the host version/fix and repeat native
+assistive-technology checks before release; do not hard-code an ARIA state that
+could disagree with the actual sending mode.
