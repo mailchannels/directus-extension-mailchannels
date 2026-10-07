@@ -1,6 +1,7 @@
 """Exercise the built extension in real Directus; isolated HTTPS fixture, no email.
 Run after npm ci && npm run build. Requires Docker, openssl, Python 3.
 """
+import argparse
 import json
 import os
 from pathlib import Path
@@ -12,6 +13,11 @@ import time
 
 ROOT = Path(__file__).resolve().parents[1]
 IMAGE = 'directus/directus:12.4.1'
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--studio-port', type=int, help='Keep disposable fixture running on localhost for Data Studio review; Ctrl-C cleans up')
+args = parser.parse_args()
+if args.studio_port is not None and not 1024 <= args.studio_port <= 65535:
+    parser.error('Studio port must be1024–65535')
 
 def run(*args):
     return subprocess.check_output(args, text=True, stderr=subprocess.STDOUT).strip()
@@ -36,7 +42,7 @@ try:
         env = tmp / 'app.env'
         env.write_text('\n'.join([
             f'SECRET={secrets.token_hex(32)}', 'DB_CLIENT=sqlite3', 'DB_FILENAME=/tmp/directus.db',
-            'ADMIN_EMAIL=fixture@example.com', f'ADMIN_PASSWORD={secrets.token_hex(24)}', f'ADMIN_TOKEN={token}',
+            'ADMIN_EMAIL=fixture@example.com', 'ADMIN_PASSWORD=' + ('Local-fixture-only-password-2026' if args.studio_port else secrets.token_hex(24)), f'ADMIN_TOKEN={token}',
             'MAILCHANNELS_API_KEY=' + key, 'FLOWS_ENV_ALLOW_LIST=MAILCHANNELS_API_KEY',
             'NODE_EXTRA_CA_CERTS=/certs/cert.pem', 'IMPORT_IP_DENY_LIST=',
             'TELEMETRY=false', 'EXTENSIONS_MUST_LOAD=true',
@@ -143,6 +149,21 @@ try:
         assert len(stats[0]['payload']['personalizations'][0]['bcc']) == 1
         print('Exactly three authenticated fixture requests; payload preserved; no retries: passed', flush=True)
         print(json.dumps({'directus': '12.4.1', 'checks': 6, 'live_email_sent': False, 'external_network': False}))
+        if args.studio_port:
+            from studio_tunnel import open_tunnel
+            tunnel = open_tunnel(server, args.studio_port)
+            options['dryRun'] = True
+            options['payload']['subject'] = 'Studio fixture only'
+            request('/operations/' + operation, 'PATCH', {'options': options})
+            print(json.dumps({'studio': f'http://127.0.0.1:{args.studio_port}/admin/settings/flows/{flow}',
+                              'synthetic_login': 'fixture@example.com', 'cleanup': 'Ctrl-C this process'}), flush=True)
+            try:
+                while True: time.sleep(1)
+            except KeyboardInterrupt:
+                print('Stopping disposable Studio fixture', flush=True)
+            finally:
+                tunnel.shutdown(); tunnel.server_close()
+
 finally:
     for kind, name in reversed(created):
-        subprocess.run(['docker', 'rm', '-f', name] if kind == 'container' else ['docker', 'network', 'rm', name], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        subprocess.run(['docker', 'rm', '-fv', name] if kind == 'container' else ['docker', 'network', 'rm', name], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
