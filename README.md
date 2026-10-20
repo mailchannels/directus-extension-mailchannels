@@ -148,15 +148,6 @@ No live MailChannels traffic or npm publication is part of this fixture.
 
 ### Accessible operation controls
 
-The API-key reference and JSON editor expose explicit accessible names through
-Directus interface options; the dry-run control is labelled “Dry run (no email sent)”.
-These names were verified in Chrome's native accessibility tree on Directus 12.4.1,
-including the CodeMirror-generated input, without modifying the runtime DOM.
-
-A separate Directus 12.4.1 host limitation remains: its boolean interface renders
-`role="checkbox"` with `aria-pressed` instead of `aria-checked`. Chrome reports an
-incorrect checked state even though the visible control and stored boolean work.
-Space toggles the control and can restore dry-run, but correct names alone do not
-establish screen-reader acceptance. Review the host version/fix and repeat native
-assistive-technology checks before release; do not hard-code an ARIA state that
-could disagree with the actual sending mode.
+The API-key, dry-run and payload controls set accessible names through interface
+options. Directus 12.4.1's boolean interface reports state via `aria-pressed` rather
+than `aria-checked`, so some screen readers may announce the dry-run state incorrectly.
