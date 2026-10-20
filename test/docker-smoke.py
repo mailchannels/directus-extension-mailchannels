@@ -12,7 +12,8 @@ import tempfile
 import time
 
 ROOT = Path(__file__).resolve().parents[1]
-IMAGE = 'directus/directus:12.4.1'
+DIRECTUS_VERSION = os.environ.get('DIRECTUS_VERSION', '12.5.0')
+IMAGE = f'directus/directus:{DIRECTUS_VERSION}'
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--studio-port', type=int, help='Keep disposable fixture running on localhost for Data Studio review; Ctrl-C cleans up')
 args = parser.parse_args()
@@ -148,7 +149,7 @@ try:
         assert stats[0]['payload']['attachments'] == payload['attachments']
         assert len(stats[0]['payload']['personalizations'][0]['bcc']) == 1
         print('Exactly three authenticated fixture requests; payload preserved; no retries: passed', flush=True)
-        print(json.dumps({'directus': '12.4.1', 'checks': 6, 'live_email_sent': False, 'external_network': False}))
+        print(json.dumps({'directus': DIRECTUS_VERSION, 'checks': 6, 'live_email_sent': False, 'external_network': False}))
         if args.studio_port:
             from studio_tunnel import open_tunnel
             tunnel = open_tunnel(server, args.studio_port)

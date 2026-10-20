@@ -23,7 +23,7 @@
     "validate": "directus-extension validate"
   },
   "devDependencies": {
-    "@directus/extensions-sdk": "18.0.5"
+    "@directus/extensions-sdk": "18.0.6"
   },
   "directus:extension": {
     "type": "operation",
@@ -50,12 +50,6 @@
         }
       }
     }
-  },
-  "overrides": {
-    "@directus/composables": {
-      "axios": "1.20.0"
-    },
-    "vue": "3.5.43"
   },
   "bugs": {
     "email": "dev@mailchannels.com",

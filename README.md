@@ -1,7 +1,7 @@
 # MailChannels Email for Directus Flows
 
-Unreleased extension candidate for Directus 12.4.1. **Not published to npm or the Directus
-Marketplace; no live MailChannels API test has been performed.**
+Unreleased extension candidate for Directus 12.4.1 and 12.5.0. **Not published to npm or
+the Directus Marketplace; no live MailChannels API test has been performed.**
 
 Send transactional email or validate a request without sending it. The operation
 accepts the complete [MailChannels send payload](https://docs.mailchannels.com/email-api/overview),
@@ -82,18 +82,11 @@ python test/docker-smoke.py
 ```
 
 The Docker smoke test requires Linux Docker networking, Python 3 and OpenSSL.
-It starts Directus 12.4.1 and a local HTTPS fixture on an internal Docker network,
+It starts Directus 12.5.0 (set `DIRECTUS_VERSION=12.4.1` to test the older host)
+and a local HTTPS fixture on an internal Docker network,
 trusts a temporary test certificate, and uses generated fixture credentials.
 It does not reach MailChannels or send email. Test-only private-IP access is
 confined to this isolated network. Containers and network are removed afterward.
-
-The build SDK's `@directus/composables` dependency pins an affected Axios version.
-A scoped development override selects Axios 1.20.0; `npm audit` reports zero
-vulnerabilities for this package at preparation time. The API bundle imports the
-host `directus:api` function, so this build-time override does not alter the host.
-A second override pins Vue 3.5.43 across the SDK toolchain for GHSA-g2v6-rqmx-r4w6;
-neither override patches the Directus server image. Remove both once upstream SDK
-pins include the fixes.
 
 Before release: review the Data Studio form in a real project, perform an
 explicitly authorized live dry-run, confirm the npm name,
