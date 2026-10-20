@@ -123,15 +123,15 @@ fixture; do not reuse them in a real project. The MailChannels key is independen
 random and belongs only to the mock HTTPS service, not a real account.
 
 When reusing the same browser and port after recreating this disposable fixture, an
-expired session can make the initial extension-source request return403. In tested
-Directus12.4.1, signing in then showed `Operation "mailchannels-send-email" not found`
+expired session can make the initial extension-source request return 403. In tested
+Directus 12.4.1, signing in then showed `Operation "mailchannels-send-email" not found`
 until the page was reloaded. Reload once after successful fixture login and confirm
 that the MailChannels Email operation and its options appear. Do not click Reset
 Interface or overwrite the saved operation to work around an unloaded app bundle.
 If reload does not restore it, investigate extension loading and authentication;
 backend smoke success alone does not prove that the Studio bundle loaded.
 
-The listener binds127.0.0.1 only. It tunnels TCP over `docker exec` so Directus and its
+The listener binds 127.0.0.1 only. It tunnels TCP over `docker exec` so Directus and its
 HTTPS fixture stay on an internal Docker network with no internet egress. No extra
 bridge network or public port is opened. Studio mode is for a trusted local reviewer,
 not a shared hosting environment. Ctrl-C the script to stop the listener, remove its
@@ -143,8 +143,8 @@ dynamic Flow expressions, and success/rejection branches. This mode makes that r
 reproducible; serving the page alone is not proof of correct rendering or interaction.
 No live MailChannels traffic or npm publication is part of this fixture.
 
-The development dependency overrides pin Axios1.20.0 under Directus composables and
-Vue3.5.43 across the SDK toolchain. The Vue pin addresses the server-renderer advisory
+The development dependency overrides pin Axios 1.20.0 under Directus composables and
+Vue 3.5.43 across the SDK toolchain. The Vue pin addresses the server-renderer advisory
 GHSA-g2v6-rqmx-r4w6 without downgrading the Directus SDK. This package has only development
 dependencies; these overrides do not patch the installed Directus server image. Rebuilt
 app/API bundles retain their prior hashes. Review/remove overrides when upstream SDK
@@ -154,10 +154,10 @@ pins incorporate the fixes, and rerun the clean build, validator and native smok
 
 The API-key reference and JSON editor expose explicit accessible names through
 Directus interface options; the dry-run control is labelled “Dry run (no email sent)”.
-These names were verified in Chrome's native accessibility tree on Directus12.4.1,
+These names were verified in Chrome's native accessibility tree on Directus 12.4.1,
 including the CodeMirror-generated input, without modifying the runtime DOM.
 
-A separate Directus12.4.1 host limitation remains: its boolean interface renders
+A separate Directus 12.4.1 host limitation remains: its boolean interface renders
 `role="checkbox"` with `aria-pressed` instead of `aria-checked`. Chrome reports an
 incorrect checked state even though the visible control and stored boolean work.
 Space toggles the control and can restore dry-run, but correct names alone do not
