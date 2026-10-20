@@ -44,6 +44,13 @@ Use an allowed sender and recipient for initial validation.
 
 ## Credentials, logs and failures
 
+Directus 12.4.1 can save an operation with an empty payload even though the
+field is marked required. Saving the Flow does not validate an email request.
+The extension rejects a missing payload before making an HTTP request. Inspect
+the operation's resolve/reject result in Flow logs: the Flow webhook itself can
+return HTTP 200 with an empty object even when an operation rejects. Confirm the
+explicit `validated: true` result before treating a dry-run as successful.
+
 The sandbox scope allows initial POST requests only to the fixed MailChannels
 send URL and its dry-run variant. The extension never returns the key, payload or API response
 body, and sanitizes errors without retaining the original exception. It does not
@@ -84,6 +91,9 @@ The build SDK's `@directus/composables` dependency pins an affected Axios versio
 A scoped development override selects Axios 1.20.0; `npm audit` reports zero
 vulnerabilities for this package at preparation time. The API bundle imports the
 host `directus:api` function, so this build-time override does not alter the host.
+A second override pins Vue 3.5.43 across the SDK toolchain for GHSA-g2v6-rqmx-r4w6;
+neither override patches the Directus server image. Remove both once upstream SDK
+pins include the fixes.
 
 Before release: review the Data Studio form in a real project, perform an
 explicitly authorized live dry-run, confirm the npm name,
@@ -104,3 +114,40 @@ Support owner: [dev@mailchannels.com](mailto:dev@mailchannels.com).
 - [Sandbox scopes](https://directus.com/docs/guides/extensions/api-extensions/sandbox)
 - [Flow environment configuration](https://directus.com/docs/configuration/flows)
 - [Marketplace publication](https://directus.com/docs/guides/extensions/marketplace/publishing)
+
+## Disposable Data Studio review
+
+After building the extension, run `python test/docker-smoke.py --studio-port 18055`.
+The usual six sandbox checks run first. The script then leaves the local fixture alive,
+restores dry-run mode, and prints its Flow URL. Open that URL in a browser on the same
+machine. The synthetic login is `fixture@example.com` with password
+`Local-fixture-only-password-2026`. These credentials belong only to this disposable
+fixture; do not reuse them in a real project. The MailChannels key is independently
+random and belongs only to the mock HTTPS service, not a real account.
+
+When reusing the same browser and port after recreating this disposable fixture, an
+expired session can make the initial extension-source request return 403. In tested
+Directus 12.4.1, signing in then showed `Operation "mailchannels-send-email" not found`
+until the page was reloaded. Reload once after successful fixture login and confirm
+that the MailChannels Email operation and its options appear. Do not click Reset
+Interface or overwrite the saved operation to work around an unloaded app bundle.
+If reload does not restore it, investigate extension loading and authentication;
+backend smoke success alone does not prove that the Studio bundle loaded.
+
+The listener binds 127.0.0.1 only. It tunnels TCP over `docker exec` so Directus and its
+HTTPS fixture stay on an internal Docker network with no internet egress. No extra
+bridge network or public port is opened. Studio mode is for a trusted local reviewer,
+not a shared hosting environment. Ctrl-C the script to stop the listener, remove its
+containers/network and discard the temporary credentials/database. Normal smoke-test
+mode still exits and cleans up automatically.
+
+Inspect the operation's API-key environment reference, dry-run default, JSON editor,
+dynamic Flow expressions, and success/rejection branches. This mode makes that review
+reproducible; serving the page alone is not proof of correct rendering or interaction.
+No live MailChannels traffic or npm publication is part of this fixture.
+
+### Accessible operation controls
+
+The API-key, dry-run and payload controls set accessible names through interface
+options. Directus 12.4.1's boolean interface reports state via `aria-pressed` rather
+than `aria-checked`, so some screen readers may announce the dry-run state incorrectly.
