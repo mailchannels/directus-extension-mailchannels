@@ -62,5 +62,8 @@ test('network errors never leak original messages, causes or response data and d
 test('UI defaults to environment reference and dry-run; overview reveals no email content', () => {
   assert.equal(app.options.find(x => x.field === 'apiKey').schema.default_value, '{{$env.MAILCHANNELS_API_KEY}}');
   assert.equal(app.options.find(x => x.field === 'dryRun').schema.default_value, true);
+  assert.equal(app.options.find(x => x.field === 'apiKey').meta.options['aria-label'], 'API key reference');
+  assert.equal(app.options.find(x => x.field === 'dryRun').meta.options.label, 'Dry run (no email sent)');
+  assert.equal(app.options.find(x => x.field === 'payload').meta.options.altOptions.screenReaderLabel, 'Email API payload');
   assert.ok(!JSON.stringify(app.overview({ apiKey, payload })).includes(apiKey));
 });

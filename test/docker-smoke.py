@@ -18,7 +18,7 @@ parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--studio-port', type=int, help='Keep disposable fixture running on localhost for Data Studio review; Ctrl-C cleans up')
 args = parser.parse_args()
 if args.studio_port is not None and not 1024 <= args.studio_port <= 65535:
-    parser.error('Studio port must be1024–65535')
+    parser.error('Studio port must be 1024–65535')
 
 def run(*args):
     return subprocess.check_output(args, text=True, stderr=subprocess.STDOUT).strip()
