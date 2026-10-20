@@ -51,12 +51,6 @@
       }
     }
   },
-  "overrides": {
-    "@directus/composables": {
-      "axios": "1.20.0"
-    },
-    "vue": "3.5.43"
-  },
   "bugs": {
     "email": "dev@mailchannels.com",
     "url": "https://github.com/mailchannels/directus-extension-mailchannels/issues"

@@ -88,11 +88,6 @@ trusts a temporary test certificate, and uses generated fixture credentials.
 It does not reach MailChannels or send email. Test-only private-IP access is
 confined to this isolated network. Containers and network are removed afterward.
 
-The build SDK's `@directus/composables` dependency pins an affected Axios version.
-A scoped development override selects Axios 1.20.0; `npm audit` reports zero
-vulnerabilities for this package at preparation time. The API bundle imports the
-host `directus:api` function, so this build-time override does not alter the host.
-
 Before release: review the Data Studio form in a real project, perform an
 explicitly authorized live dry-run, confirm the npm name,
 and publish through a MailChannels npm maintainer.
@@ -143,13 +138,6 @@ Inspect the operation's API-key environment reference, dry-run default, JSON edi
 dynamic Flow expressions, and success/rejection branches. This mode makes that review
 reproducible; serving the page alone is not proof of correct rendering or interaction.
 No live MailChannels traffic or npm publication is part of this fixture.
-
-The development dependency overrides pin Axios1.20.0 under Directus composables and
-Vue3.5.43 across the SDK toolchain. The Vue pin addresses the server-renderer advisory
-GHSA-g2v6-rqmx-r4w6 without downgrading the Directus SDK. This package has only development
-dependencies; these overrides do not patch the installed Directus server image. Rebuilt
-app/API bundles retain their prior hashes. Review/remove overrides when upstream SDK
-pins incorporate the fixes, and rerun the clean build, validator and native smoke test.
 
 ### Accessible operation controls
 
