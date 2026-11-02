@@ -15,7 +15,7 @@ jobs:
       - name: Test and build
         run: docker run --rm --user "$(id -u):$(id -g)" -e npm_config_cache=/tmp/npm -v "$PWD:/app" -w /app node:22-bookworm sh -c 'npm test && npm run build && npm run validate && npm pack --dry-run'
       - name: Audit dependencies
-        run: docker run --rm --user "$(id -u):$(id -g)" -e npm_config_cache=/tmp/npm -v "$PWD:/app" -w /app node:22-bookworm npm audit --omit=dev --audit-level=low
+        run: docker run --rm --user "$(id -u):$(id -g)" -e npm_config_cache=/tmp/npm -v "$PWD:/app" -w /app node:22-bookworm npm audit --audit-level=low
       - name: Installed Directus smoke test
         run: python3 test/docker-smoke.py
       - name: Installed Directus 12.4.1 smoke test
