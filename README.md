@@ -1,21 +1,36 @@
 # MailChannels Email for Directus Flows
 
-Unreleased extension candidate for Directus 12.4.1 and 12.5.0. **Not published to npm or
-the Directus Marketplace; no live MailChannels API test has been performed.**
+Send Directus email reliably through MailChannels: delivery tracking, bounce handling
+and domain authentication built in. Free to start.
 
-Send transactional email or validate a request without sending it. The operation
-accepts the complete [MailChannels send payload](https://docs.mailchannels.com/email-api/overview),
+MailChannels sends your Directus project's email, such as order confirmations, form
+notifications and alerts triggered by changes to your data, through the MailChannels
+Email API from a Flow operation, so it reaches the inbox. Connect with an API key,
+verify your domain, and every message is tracked: you can see deliveries, bounces and
+complaints, and bounced addresses are suppressed automatically. MailChannels has
+delivered email for web hosting providers for twenty years. Start free with 100 emails
+a day, then pay one simple price per send.
+
+Version 0.1.0 is [published to npm](https://www.npmjs.com/package/@mailchannels/directus-extension-mailchannels)
+and appears in the Directus Marketplace registry, for Directus 12.4.1 and 12.5.0.
+No live MailChannels API test has been performed.
+
+The **MailChannels Email** operation sends transactional email, or validates a request
+without sending it. It accepts the complete
+[MailChannels send payload](https://docs.mailchannels.com/email-api/overview),
 including personalizations, attachments, reply-to, custom headers and tracking
-settings. It does not replace Directus' built-in system email transport.
+settings. It does not replace Directus' built-in system email transport, so Directus'
+own emails, such as password resets and user invitations, are not sent through it.
 
 ## Setup
 
 A MailChannels account, API key and authorized sending domain are required.
 Use an allowed sender and recipient for initial validation.
 
-1. Install the built package into your self-hosted Directus extensions directory
-   and restart Directus. After publication, search for **MailChannels** in the
-   Directus Marketplace. Marketplace installation is not available yet.
+1. Install the `@mailchannels/directus-extension-mailchannels` npm package into
+   your self-hosted Directus extensions directory and restart Directus. The
+   package also appears when you search for **MailChannels** in the Directus
+   Marketplace; installing from the Marketplace has not been verified yet.
 2. Set `MAILCHANNELS_API_KEY` in your server's secret/environment configuration.
    Add `MAILCHANNELS_API_KEY` to `FLOWS_ENV_ALLOW_LIST`, preserving any existing
    entries. Restart Directus. Enterprise Cloud environment settings require
@@ -88,9 +103,8 @@ trusts a temporary test certificate, and uses generated fixture credentials.
 It does not reach MailChannels or send email. Test-only private-IP access is
 confined to this isolated network. Containers and network are removed afterward.
 
-Before release: review the Data Studio form in a real project, perform an
-explicitly authorized live dry-run, confirm the npm name,
-and publish through a MailChannels npm maintainer.
+Before each release: review the Data Studio form in a real project, perform an
+explicitly authorized live dry-run, and publish through a MailChannels npm maintainer.
 Public [source and issues](https://github.com/mailchannels/directus-extension-mailchannels)
 are available for review.
 The package contains required Marketplace metadata and built app/API entrypoints.
