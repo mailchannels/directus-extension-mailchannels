@@ -23,7 +23,7 @@
     "validate": "directus-extension validate"
   },
   "devDependencies": {
-    "@directus/extensions-sdk": "18.0.6"
+    "@directus/extensions-sdk": "18.1.0"
   },
   "directus:extension": {
     "type": "operation",
@@ -58,5 +58,9 @@
     "type": "git",
     "url": "git+https://github.com/mailchannels/directus-extension-mailchannels.git"
   },
-  "homepage": "https://github.com/mailchannels/directus-extension-mailchannels#readme"
+  "homepage": "https://github.com/mailchannels/directus-extension-mailchannels#readme",
+  "overrides": {
+    "deepmerge": "4.1.2",
+    "joi": "18.3.2"
+  }
 }
