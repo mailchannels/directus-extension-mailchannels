@@ -1,7 +1,7 @@
 {
   "name": "@mailchannels/directus-extension-mailchannels",
   "version": "0.1.0",
-  "description": "Send transactional email with MailChannels in Directus Flows.",
+  "description": "Send Directus email reliably through MailChannels: delivery tracking, bounce handling and domain authentication built in. Free to start.",
   "type": "module",
   "license": "MIT",
   "keywords": [
