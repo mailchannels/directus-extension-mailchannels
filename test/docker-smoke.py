@@ -145,6 +145,9 @@ try:
         stats = json.loads(run('docker', 'exec', '-e', 'NODE_EXTRA_CA_CERTS=/certs/cert.pem', fixture, 'node', '-e', script))
         assert len(stats) == 3, stats
         assert all(call['authorized'] for call in stats)
+        version = json.loads((ROOT / 'package.json').read_text())['version']
+        assert all(call['userAgent'] == 'mailchannels-directus/' + version for call in stats), stats
+        print('User-Agent survives the sandbox: passed', flush=True)
         assert stats[0]['url'].endswith('?dry-run=true')
         assert stats[0]['payload']['attachments'] == payload['attachments']
         assert len(stats[0]['payload']['personalizations'][0]['bcc']) == 1
