@@ -1,4 +1,8 @@
+import pkg from '../package.json' with { type: 'json' };
+
 const endpoint = 'https://api.mailchannels.net/tx/v1/send';
+// Identifies this extension's Email API traffic in usage reporting.
+export const USER_AGENT = `mailchannels-directus/${pkg.version}`;
 
 // Only the platform's scoped request function crosses the sandbox boundary.
 export function createHandler(request) {
@@ -24,7 +28,7 @@ export function createHandler(request) {
     try {
       response = await request(endpoint + (validate ? '?dry-run=true' : ''), {
         method: 'POST',
-        headers: { 'X-Api-Key': apiKey, 'Content-Type': 'application/json' },
+        headers: { 'X-Api-Key': apiKey, 'Content-Type': 'application/json', 'User-Agent': USER_AGENT },
         body,
       });
     } catch {

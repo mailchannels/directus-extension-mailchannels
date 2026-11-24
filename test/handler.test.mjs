@@ -18,6 +18,7 @@ test('default dry-run preserves full payload and returns only status fields', as
     assert.equal(url, 'https://api.mailchannels.net/tx/v1/send?dry-run=true');
     assert.equal(options.method, 'POST');
     assert.equal(options.headers['X-Api-Key'], apiKey);
+    assert.equal(options.headers['User-Agent'], 'mailchannels-directus/0.1.1');
     assert.deepEqual(options.body, payload);
     return { status: 200, data: { secret: apiKey } };
   });

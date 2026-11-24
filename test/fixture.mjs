@@ -7,7 +7,7 @@ https.createServer({ key: fs.readFileSync('/certs/key.pem'), cert: fs.readFileSy
   for await (const chunk of req) raw += chunk;
   const payload = JSON.parse(raw);
   const authorized = req.headers['x-api-key'] === process.env.FIXTURE_KEY;
-  calls.push({ url: req.url, authorized, payload });
+  calls.push({ url: req.url, authorized, userAgent: req.headers['user-agent'], payload });
   if (!authorized || payload.subject === 'Reject fixture') {
     res.writeHead(401, { 'Content-Type': 'application/json' });
     // Intentional sentinel echo tests extension error sanitization.
