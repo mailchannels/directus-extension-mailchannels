@@ -99,7 +99,9 @@ and install after publication instead of treating npm publication as completion.
 
 ## Support
 
-Support owner: [dev@mailchannels.com](mailto:dev@mailchannels.com).
+This project is supported by the MailChannels team on a best-effort basis. The best way to get support is to file an issue on GitHub: https://github.com/mailchannels/directus-extension-mailchannels/issues
+
+If you are a MailChannels customer and have a problem with the operation of the MailChannels service, you can get support at https://support.mailchannels.com/
 
 ## References
 

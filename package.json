@@ -52,7 +52,6 @@
     }
   },
   "bugs": {
-    "email": "dev@mailchannels.com",
     "url": "https://github.com/mailchannels/directus-extension-mailchannels/issues"
   },
   "repository": {
